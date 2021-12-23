@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="101.899" height="101.899" viewBox="0 0 101.899 101.899">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: rgba(255,255,255,0);
+        stroke: #ff0303;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 14px;
+      }
+    </style>
+  </defs>
+  <path id="Union_1" data-name="Union 1" class="cls-1" d="M46,46,0,92,46,46,0,0,46,46,92,0,46,46,92,92Z" transform="translate(4.95 4.95)"/>
+</svg>

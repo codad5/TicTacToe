@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+        padding: 0;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-sizing: border-box;
+
+        }
+        header {
+            width: 100vw;
+            height: 40px;
+            background: violet;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+        main{
+            width: 100vw;
+            height: calc(100vh - 40px);
+            background:violet;
+            display:grid;
+            place-items: center;
+            position: relative;
+        }
+        .game_cnt{
+            display:table;
+            height:400px;
+            width: 400px;
+            border: solid 2px white;
+        }
+        .game_box_row{
+            display: table-row;
+
+        }
+        .game_box{
+            display: table-cell;
+            border: solid 2px white;
+            width:133px;
+            height: 133px;
+            
+        }
+        .panel_board{
+            position: absolute;
+            height:90px;
+            width: 400px;
+            border: solid 2px white;
+            top: 15px;
+            display:flex;
+
+            
+        }
+        .panel_board{
+            /* display:table-cell; */
+            /* height: 100%; */
+            flex-basis: 50%;
+            /* height: 100%; */
+            width:50%;
+            position: absolute;
+            top: 0;
+            display: flex;
+            align-items: center;
+            
+        }
+        .x_panel_board{
+            flex-direction: row-reverse;
+        }
+        .o_panel_board {
+            right: 0;
+        }
+        .panel_img{
+            flex-basis: 50%;
+            /* height: 100%; */
+            width:50%;
+            /* position: absolute; */
+            /* top: 0; */
+            display: grid;
+            place-items: center;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+
+        }
+        .panel_img img {
+            height: 80%;
+            width: 80%;
+        }
+        .x_box{
+            background: url(asset/Union.svg);
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .o_box{
+            background: url(asset/Ellipse1.svg);
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .undo_btn{
+            position: fixed;
+            width: 60px;
+            height: 40px;
+            top: 10px;
+            left: 100px;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        TIC_TAC_TOE
+        <nav>
+            <button class="undo_btn" onclick="undo()">UNDO</button>
+        </nav>
+    </header>
+    <main>
+        <div class="panel_board">
+            <div class="x_panel_board panel_board">
+                <div class="panel_img">
+                    <img src="asset/Union.svg" alt="" srcset="" class="">
+                </div>
+                <div class="panel_img">
+                    55
+                </div>
+            </div>
+            <div class="o_panel_board panel_board">
+                
+                <div class="panel_img">
+                    <img src="asset/Ellipse1.svg" alt="" srcset="" class="">
+                </div>
+                <div class="panel_img">
+                    55
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <div class="game_cnt">
+            <div class="game_box_row">
+                <div class="game_box">
+                </div>
+                <div class="game_box">
+                </div>
+                <div class="game_box">
+                </div>
+            </div>
+            <div class="game_box_row">
+                <div class="game_box">
+                </div>
+                <div class="game_box">
+                </div>
+                <div class="game_box ">
+                </div>
+            </div>
+            <div class="game_box_row">
+                <div class="game_box ">
+                </div>
+                <div class="game_box">
+                </div>
+                <div class="game_box">
+                </div>
+            </div>
+            
+
+        </div>
+        
+    </main>
+</body>
+<script>
+    const x_panel = document.querySelector(".x_panel_board");
+    const o_panel = document.querySelector(".o_panel_board");
+    const undo_btn = document.querySelector(".undo_btn");
+    const boxes = document.querySelectorAll(".game_box");
+    var boxFilled;
+    var lastBoxSelected = 0;
+    var allMoves = [] ?? [0];
+    let x_player = new Player(prompt("x-player Name"), x_panel);
+    let o_player = new Player(prompt("o-player Name"), o_panel);
+
+    // console.log(x_player.name);
+    currentPlayer = x_player;
+    function checkSelected(){
+        let currentBox = 0; //this is a default for 0
+        boxes.forEach(element => {
+            currentBox+=1;
+            // console.log(element.classList[1]);
+            if (element.classList[1] == "selected") {
+                lastBoxSelected = currentBox;
+                allMoves.push(currentBox);
+
+                
+            }
+        });
+    }
+    function undo(){
+        let achieved = boxes[allMoves.slice(-1) - 1].classList[1];
+        
+        console.log(achieved+" "+allMoves);
+        boxes[allMoves.slice(-1) - 1].classList.remove(achieved);
+        if (achieved == "x_box") {
+            currentPlayer = x_player;
+            
+        }
+        else if (achieved == "o_box"){
+            currentPlayer = o_player;
+
+        }
+        allMoves.pop();
+        switch (currentPlayer) {
+            case x_player:
+                o_player.panel.style= "border:solid 7px white";
+                x_player.panel.style= "border:solid 7px red";
+                break;
+                case o_player:
+                    o_player.panel.style= "border:solid 7px blue";
+                    x_player.panel.style= "border:solid 7px white";
+                    break;
+                    
+        
+            default:
+                break;
+        }
+        
+    }
+    function Player(a, b){
+        this.point = 0;
+        this.name = a;
+        this.panel = b;
+        this.boxClass;
+        this.numberOfMoves = [];
+
+        switch (b) {
+            case x_panel:
+                
+                this.boxClass = "x_box";
+                break;
+            case o_panel:
+                
+                this.boxClass = "o_box";
+                break;
+        
+            default:
+                break;
+        }
+        this.myBoxes = document.querySelectorAll("."+this.boxClass);
+
+    }
+    function boxFilld(){
+        let totalFilled = 0;
+
+        boxes.forEach(element => {
+        if (element.classList.length >= 2) {
+            totalFilled++;
+            // console.log(totalFilled);
+        }
+        if (totalFilled >= 9) {
+            boxFilled = true;
+        }else{
+            boxFilled = false;
+        }
+            
+        });
+        
+    }
+
+    console.log(boxFilld());
+    function play(player){
+        let position = player;
+        // console.log(player.myBoxes);
+        boxFilld();
+        if (boxFilled) {
+            setTimeout(function(){
+                if (confirm("Game over \n Please refresh to start all over")) {
+                    document.location.reload(true);
+                }
+                
+            }, 1000)
+            
+        }
+        else {
+            player.numberOfMoves.push(lastBoxSelected);
+            console.log(player);
+
+        }
+        // console.log(boxFilled);
+
+    }
+    
+    
+    currentPlayer.panel.style= "border:solid 7px red";
+
+    let findBox = 0;
+    boxes.forEach(element => {
+        findBox++;
+        // console.log(findBox);
+        element.addEventListener("click", () =>{
+            // console.log(boxes[findBox]);
+            // console.log(element.classList);
+            // console.log(currentPlayer);
+            element.classList.add("selected");
+            checkSelected();
+            element.classList.remove("selected");
+            console.log(lastBoxSelected);
+            if (element.classList.length < 2) {
+
+            switch (currentPlayer) {
+                case x_player:
+                        element.classList.add("x_box");
+                        // element.classList.remove("game_box");
+                        currentPlayer = o_player;
+                        x_player.panel.style= "border:solid 7px white";
+                        o_player.panel.style= "border:solid 7px blue";
+                        x_player.myBoxes = document.querySelectorAll(".x_box");
+                        play(x_player);
+                        
+                        // x_player.ni = findBox;
+                        
+                        
+                        
+                        
+                        break;
+                        case o_player:
+                            element.classList.add("o_box");
+                            currentPlayer = x_player;
+                            o_player.panel.style= "border:solid 7px white";
+                            x_player.panel.style= "border:solid 7px red";
+                            o_player.myBoxes = document.querySelectorAll(".o_box");
+                            play(o_player);
+                        break;
+            
+                default:
+                    break;
+            }
+        }
+        })
+    });
+    // undo_btn.addEventListener("click", undo());
+</script>
+</html>
